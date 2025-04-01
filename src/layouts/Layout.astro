@@ -1,22 +1,39 @@
+---
+import Footer from "../components/navigations/Footer.astro";
+import Navbar from "../components/navigations/Navbar.astro";
+import type { BlogConfig } from "../config/blog/config";
+import "../styles/global.css";
+
+interface Props {
+	title: BlogConfig["blogName"];
+	description?: BlogConfig["blogDescription"];
+	autor?: BlogConfig["blogAuthor"];
+}
+
+const { title, description, autor = "Crixpsitos" } = Astro.props;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Empezando Como Dev blog</title>
+		<meta name="description" content={description} />
+		<meta name="author" content={autor} />
+		<title>{title}</title>
 	</head>
-	<body>
+	<body class="bg-gray-900 text-gray-100">
+		<Navbar />
 		<slot />
+		<Footer />
 	</body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
+<style is:global>
+	html, body {
+		min-width: 100dvw;
+		min-height: 100dvh;
 	}
 </style>

@@ -1,0 +1,49 @@
+---
+import { Button } from "../ui/button";
+
+interface Props {
+    categories: string[];
+    postCounts: Record<string, number>;
+}
+
+const { categories, postCounts } = Astro.props;
+---
+
+<div
+    class="bg-gray-800/50 rounded-2xl p-6 backdrop-blur-sm border border-gray-700/50 animate-slide-up"
+>
+    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 text-purple-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"
+            ></path>
+        </svg>
+        Categorías
+    </h2>
+    <div class="space-y-2">
+        {
+            categories.map((category) => (
+                <Button client:load 
+                    onClick={() => console.log("hola mundo")}
+                    class="block px-4  py-2 rounded-lg transition-all duration-300 hover:bg-purple-600/20 text-gray-300 hover:text-white group"
+                >
+                    <div class="flex items-center justify-between">
+                        <span>{category.replaceAll("-", " ")}</span>
+                        <span class="bg-purple-600/20 px-2 py-1 rounded-full text-xs group-hover:bg-purple-600/40">
+                            {postCounts[category] || 0}
+                        </span>
+                    </div>
+                </Button>
+            ))
+        }
+    </div>
+</div>

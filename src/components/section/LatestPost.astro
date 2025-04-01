@@ -1,0 +1,60 @@
+---
+import ArrowRight from "../../icons/ArrowRight.astro";
+import BlogPostCard from "../blog/BlogPostCard.astro";
+import type { Post } from "../../interfaces/Post";
+
+interface Props {
+    latestPosts: Post[];
+}
+
+const { latestPosts } = Astro.props;
+
+// const latestPosts = [
+//     {
+//         id: "1",
+//         title: "Getting Started with React",
+//         excerpt:
+//             "A beginner-friendly guide to start your journey with React development.",
+//         date: "2023-10-15",
+//         readTime: "5 min",
+//         tags: ["React", "Frontend"],
+//         slug: "getting-started-with-react",
+//     },
+//     {
+//         id: "2",
+//         title: "CSS Grid vs Flexbox",
+//         excerpt:
+//             "Understanding when to use CSS Grid and when to use Flexbox for modern layouts.",
+//         date: "2023-10-10",
+//         readTime: "7 min",
+//         tags: ["CSS", "Layout"],
+//         slug: "css-grid-vs-flexbox",
+//     },
+//     {
+//         id: "3",
+//         title: "JavaScript Promises Explained",
+//         excerpt:
+//             "A deep dive into JavaScript Promises and async/await patterns.",
+//         date: "2023-10-05",
+//         readTime: "8 min",
+//         tags: ["JavaScript", "Async"],
+//         slug: "javascript-promises-explained",
+//     },
+// ];
+---
+
+<section class="py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl md:text-3xl font-bold">Lo ultimo que eh escrito</h2>
+        <a
+            href="/blog"
+            class="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 transition-colors"
+        >
+            Ver todo
+            <ArrowRight class="size-4" />
+        </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {latestPosts.map((post) => <BlogPostCard post={post} />)}
+    </div>
+</section>

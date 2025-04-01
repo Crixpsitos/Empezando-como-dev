@@ -1,0 +1,19 @@
+---
+interface Props {
+    name: string;
+    path: string;
+    external?: boolean;
+    currentPath: string;
+}
+
+const { name, path, external, currentPath } = Astro.props;
+
+---
+
+<a
+    href={path}
+    target={external ? "_blank" : ""}
+    class={`flex  items-center gap-1.5 hover:text-emerald-400 transition-colors ${
+        currentPath === path ? "text-emerald-400" : "text-white"
+    }`}>{name}</a
+>
