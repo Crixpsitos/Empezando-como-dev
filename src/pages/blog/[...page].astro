@@ -1,12 +1,11 @@
 ---
 import type { GetStaticPaths } from "astro";
 import Layout from "../../layouts/Layout.astro";
-import { BlogsRepository } from "../../repositories/blogs/getBlogs";
-import PillsTag from "../../components/ui/PillsTag.astro";
-import BlogCard from "../../components/blog/BlogCard.astro";
+import { BlogsRepository } from "../../repositories/server/blogs/blogsRepository";
+import { PillsTag } from "../../components/ui/PillsTag";
 import Categories from "../../components/blog/Categories.astro";
-
-const currentPage = Astro.url.pathname.replace(/(\/\d*)?\/$/, "");
+import BlogGrid from "@/components/blog/BlogGrid";
+import Pagination from "@/components/blog/Pagination.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
     const blogsRepository = new BlogsRepository();
@@ -15,26 +14,34 @@ export const getStaticPaths = (async ({ paginate }) => {
     const allCategories = Array.from(
         new Set(blogs.map((blog) => blog.categories)),
     );
+
+    const categoryCount = allCategories.reduce(
+        (acc, category) => {
+            acc[category] = blogs.filter(
+                (blog) => blog.categories === category,
+            ).length;
+            return acc;
+        },
+        {} as Record<string, number>,
+    );
     const recentPosts = [...blogs]
         .sort(
             (a, b) =>
-                b.createdAt.toDate().getTime() - a.createdAt.toDate().getTime(),
+                new Date(String(b.createdAt)).getTime() -
+                new Date(String(a.createdAt)).getTime(),
         )
         .slice(0, 4);
+
     return paginate(blogs, {
         pageSize: 6,
-        props: { allTags, allCategories, recentPosts },
+        props: { allTags, allCategories, recentPosts, categoryCount },
     });
 }) satisfies GetStaticPaths;
 
-const { page, allTags, allCategories, recentPosts } = Astro.props;
+const { page, allTags, allCategories, recentPosts, categoryCount } =
+    Astro.props;
 
-const categoryCount = allCategories.reduce((acc: Record<any, number>, category: string) => {
-    acc[category] = page.data.filter(post => post.categories === category).length;
-    return acc;
-}, {});
 
-console.log(categoryCount);
 ---
 
 <Layout title="Blog">
@@ -63,35 +70,18 @@ console.log(categoryCount);
                 <!-- Main Content -->
                 <div class="lg:w-2/3 space-y-8">
                     <!-- Blog Grid -->
-                    <section
-                        class="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in"
-                    >
-                        {page.data.map((post) => <BlogCard post={post} />)}
-                    </section>
+                    <BlogGrid
+                        client:load
+                        post={page.data}
+                        page={page.currentPage}
+                    />
 
                     <!-- Pagination -->
-                    {
-                        (page.url.prev || page.url.next) && (
-                            <nav class="flex justify-center gap-4 mt-12">
-                                {page.url.prev && (
-                                    <a
-                                        href={page.url.prev}
-                                        class="px-6 py-3 rounded-lg bg-purple-600/20 text-purple-300 hover:bg-purple-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/20 border border-purple-500/30"
-                                    >
-                                        ← Anterior
-                                    </a>
-                                )}
-                                {page.url.next && (
-                                    <a
-                                        href={page.url.next}
-                                        class="px-6 py-3 rounded-lg bg-purple-600/20 text-purple-300 hover:bg-purple-600 hover:text-white transition-all duration-300 hover:shadow-lg hover:shadow-purple-600/20 border border-purple-500/30"
-                                    >
-                                        Siguiente →
-                                    </a>
-                                )}
-                            </nav>
-                        )
-                    }
+                    <Pagination
+                        currentPage={page.currentPage}
+                        nextUrl={page.url.next}
+                        prevUrl={page.url.prev}
+                    />
                 </div>
 
                 <!-- Sidebar -->
@@ -126,7 +116,30 @@ console.log(categoryCount);
                             Tags
                         </h2>
                         <div class="flex flex-wrap gap-3">
-                            {allTags.map((tag) => <PillsTag tag={tag} />)}
+                            {
+                                allTags.map((tag) => (
+                                    <PillsTag client:load tag={tag} />
+                                ))
+                            }
+                            <a
+                                href="/blog/tags/"
+                                class="flex px-4 space-x-2 py-2 items-center my-auto hover:bg-purple-600/20 cursor-pointer rounded-lg transition-colors duration-300"
+                            >
+                                <span class="text-gray-200">Ver todos</span>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-4 w-4 text-purple-400"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
                         </div>
                     </div>
 
@@ -181,16 +194,18 @@ console.log(categoryCount);
                                                         />
                                                     </svg>
                                                     <span>
-                                                        {post.createdAt
-                                                            .toDate()
-                                                            .toLocaleDateString(
-                                                                "es-ES",
-                                                                {
-                                                                    year: "numeric",
-                                                                    month: "long",
-                                                                    day: "numeric",
-                                                                },
-                                                            )}
+                                                        {new Date(
+                                                            String(
+                                                                post.createdAt,
+                                                            ),
+                                                        ).toLocaleDateString(
+                                                            "es-ES",
+                                                            {
+                                                                year: "numeric",
+                                                                month: "long",
+                                                                day: "numeric",
+                                                            },
+                                                        )}
                                                     </span>
                                                 </div>
                                                 <div class="flex items-center gap-2">
@@ -280,7 +295,7 @@ console.log(categoryCount);
     </main>
 </Layout>
 
-<style>
+<style is:global>
     @keyframes fade-in {
         from {
             opacity: 0;

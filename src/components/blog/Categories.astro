@@ -1,8 +1,9 @@
 ---
-import { Button } from "../ui/button";
+import { CategoriesButton } from "./ui/CategoriesButton";
 
 interface Props {
     categories: string[];
+
     postCounts: Record<string, number>;
 }
 
@@ -29,21 +30,22 @@ const { categories, postCounts } = Astro.props;
         </svg>
         Categorías
     </h2>
-    <div class="space-y-2">
+    <div class="gap-2 flex flex-wrap">
         {
             categories.map((category) => (
-                <Button client:load 
-                    onClick={() => console.log("hola mundo")}
-                    class="block px-4  py-2 rounded-lg transition-all duration-300 hover:bg-purple-600/20 text-gray-300 hover:text-white group"
-                >
-                    <div class="flex items-center justify-between">
-                        <span>{category.replaceAll("-", " ")}</span>
-                        <span class="bg-purple-600/20 px-2 py-1 rounded-full text-xs group-hover:bg-purple-600/40">
-                            {postCounts[category] || 0}
-                        </span>
-                    </div>
-                </Button>
+                <CategoriesButton
+                    transition:persist
+                    client:load
+                    postCounts={postCounts}
+                    category={category}
+                />
             ))
         }
+        <a
+            href="blog/categories"
+            class="block px-4 space-x-2 py-2 bg-primary shadow-xs hover:bg-purple-600/20 group text-gray-300 hover:text-white rounded-lg transition-colors duration-300"
+        >
+            Ver todos...
+        </a>
     </div>
 </div>

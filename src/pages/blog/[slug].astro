@@ -1,0 +1,33 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import type { GetStaticPaths } from "astro";
+import {BlogsRepository} from "@/repositories/server/blogs/blogsRepository"
+    
+
+export const getStaticPaths = (async () => {
+    
+    const blogsRepository = new BlogsRepository();
+    const blogs = await blogsRepository.getBlogs();
+    const paths = blogs.map((blog) => {
+        return {
+            params: { slug: blog.slug },
+            props: { blog },
+        };
+    });
+
+    return paths;
+}) satisfies GetStaticPaths;
+
+const {blog} = Astro.props;
+const {title, createdAt, likesCount, metaTitle, metaDescription} = blog
+
+---
+
+
+<Layout 
+    title={metaTitle}
+    description={metaDescription}
+    autor="Crixpsitos">
+
+    {title}
+</Layout>

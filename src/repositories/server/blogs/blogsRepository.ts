@@ -1,6 +1,7 @@
-import { db } from "../../config/firebase/admin"; // Ya inicializaste arriba
-import { QuerySnapshot } from 'firebase-admin/firestore';
-import type { Post } from "../../interfaces/Post";
+import { db } from "../../../config/firebase/admin"; 
+import { QuerySnapshot, Timestamp } from 'firebase-admin/firestore';
+import type { Post } from "../../../interfaces/Post";
+
 
 export class BlogsRepository {
     async getBlogs(limit?: number): Promise<Post[]> {
@@ -17,13 +18,13 @@ export class BlogsRepository {
             const querySnapshot: QuerySnapshot = await queryRef.get();
 
             const blogs = querySnapshot.docs.map((doc) => {
-                const data = doc.data();
+                const data = doc.data() as Post;
                 return {
                     id: doc.id,
                     categories: data.categories,
                     content: data.content,
                     coverImage: data.coverImage,
-                    createdAt: data.createdAt,
+                    createdAt: data.createdAt instanceof Timestamp ? data.createdAt.toDate() : data.createdAt,
                     description: data.description,
                     status: data.status,
                     slug: data.slug,
@@ -44,4 +45,6 @@ export class BlogsRepository {
             throw new Error('Hubo un error al traer los blogs');
         }
     }
+
+
 }

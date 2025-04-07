@@ -4,12 +4,12 @@ import ArrowRight from "../icons/ArrowRight.astro";
 import Layout from "../layouts/Layout.astro";
 import CodeSection from "../components/section/CodeSection.astro";
 import LatestPost from "../components/section/LatestPost.astro";
-import { BlogsRepository } from "../repositories/blogs/getBlogs";
+import { BlogsRepository } from "../repositories/server/blogs/blogsRepository";
 
 const blogsRepository = new BlogsRepository();
 
 const blogs = await blogsRepository.getBlogs();
-console.log(blogs)
+console.log(blogs);
 ---
 
 <Layout
@@ -49,7 +49,7 @@ console.log(blogs)
 				</div>
 			</section>
 			<CodeSection />
-			<LatestPost latestPosts={blogs}/>
+			<LatestPost latestPosts={blogs} />
 		</div>
 	</main>
 </Layout>

@@ -25,6 +25,6 @@ export const config: BlogConfig = {
 
 export const navigations = [
     { name: "Inicio", path: "/" },
-    { name: "Blog", path: "/blog" },
-    { name: "Sobre mi", path: "/about me" },
+    { name: "Blog", path: "/blog/" },
+    { name: "Sobre mi", path: "/about-me/" },
 ]

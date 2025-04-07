@@ -13,7 +13,13 @@ const { name, path, external, currentPath } = Astro.props;
 <a
     href={path}
     target={external ? "_blank" : ""}
-    class={`flex  items-center gap-1.5 hover:text-emerald-400 transition-colors ${
-        currentPath === path ? "text-emerald-400" : "text-white"
+    class={`flex items-center gap-1.5 hover:text-emerald-400 transition-colors ${
+        path === "/"
+            ? currentPath === "/"
+                ? "text-emerald-400"
+                : "text-white"
+            : currentPath.includes(path)
+              ? "text-emerald-400"
+              : "text-white"
     }`}>{name}</a
 >
