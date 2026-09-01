@@ -1,23 +1,44 @@
+---
+import "../styles/global.css";
+import Navbar from "../components/common/Navbar.astro";
+import Footer from "../components/common/footer.astro";
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props as Props;
+---
+
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+<html class="dark" lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title} — Empezando como Dev</title>
+    <meta name="description" content={description} />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    <Navbar />
+    <main class="max-w-container_max_width mx-auto px-gutter w-full flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  body {
+    background-color: #0f1211;
+    background-image:
+      linear-gradient(rgba(74, 222, 128, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(74, 222, 128, 0.045) 1px, transparent 1px);
+    background-size: 45px 45px;
+    color: #e8ece9;
+    position: relative;
+    overflow-x: hidden;
+  }
 </style>
