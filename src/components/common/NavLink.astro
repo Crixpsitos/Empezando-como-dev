@@ -1,0 +1,24 @@
+---
+interface Props {
+  href: string;
+
+  className?: string;
+  isExternal: boolean;
+}
+
+const { href, isExternal, className } = Astro.props as Props;
+
+const { pathname } = Astro.url;
+
+const isActive = pathname.replace(/\/$/, "") === href.replace(/\/$/, "");
+---
+
+<a
+  class:list={[isActive ? "text-primary" : "text-on-surface", className]}
+  href={href}
+  target={isExternal ? "_blank" : ""}
+  rel={isExternal ? "noopener noreferrer" : ""}
+  aria-current={isActive ? "page" : undefined}
+>
+  <slot />
+</a>

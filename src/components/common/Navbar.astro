@@ -1,0 +1,44 @@
+---
+import NavLink from "./NavLink.astro";
+---
+
+<nav
+  class="sticky top-0 w-full z-50 bg-background/80 dark:bg-background/80 backdrop-blur-md border-b border-outline-variant/30 h-18 flex items-center"
+>
+  <div
+    class="flex justify-between items-center w-full max-w-container_max_width mx-auto px-gutter"
+  >
+    <div class="font-display-lg text-headline-md text-on-surface">
+      Empezando <span class="text-primary"
+        >como dev<span class="animate-pulse">_</span></span
+      >
+    </div>
+    <div class="hidden md:flex items-center gap-8">
+      <NavLink
+        href="/"
+        isExternal={false}
+        className="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:text-primary duration-200"
+        >Inicio</NavLink
+      >
+      <NavLink
+        href="/Articulos"
+        isExternal={false}
+        className="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:text-primary duration-200"
+        >Articulos</NavLink
+      >
+      <NavLink
+        href="/videos"
+        isExternal={false}
+        className="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:text-primary duration-200"
+        >Videos</NavLink
+      >
+    </div>
+    <NavLink
+      isExternal={true}
+      className="font-label-md text-label-md flex items-center gap-2 text-custom-text hover:text-primary transition-colors border border-custom-border px-4 py-2 rounded-lg hover:bg-custom-hover font-mono"
+      href="https://github.com/crixpsitos/Empezando-como-dev"
+    >
+      github ↗
+    </NavLink>
+  </div>
+</nav>
