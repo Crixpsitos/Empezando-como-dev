@@ -75,7 +75,6 @@ const STEPS: Step[] = [
         ]);
       }, 1200);
     },
-    // directorio: muestra nombres sin columna de status
     renderOutput: (data) => (
       <div className="pl-2 flex flex-wrap gap-x-6 gap-y-0.5 mt-1">
         {data.map((item, i) => (

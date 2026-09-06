@@ -1,0 +1,32 @@
+---
+import ArticleCard from "../../ui/ArticleCard.astro";
+
+const currentYear = new Date().getFullYear();
+---
+
+<section class="py-stack_lg flex flex-col gap-8">
+  <div
+    class="flex justify-between items-end border-b border-outline-variant/30 pb-4"
+  >
+    <h2 class="font-headline-lg text-headline-lg font-semibold text-on-surface">
+      Últimos artículos
+    </h2>
+    <span class="font-label-sm text-label-sm text-on-surface-variant"
+      >{currentYear}</span
+    >
+  </div>
+  <ArticleCard
+    title="Aprendiendo Astro"
+    description="Intentando entender Astro y sus server islands"
+    format="article"
+    status="guide"
+    tags={["Astro", "SSR", "Islands", "TypeScript"]}
+    createdAt={new Date(currentYear, 0, 1)}
+    updatedAt={new Date(currentYear, 0, 8)}
+    cover={{
+      title: "SSR & \nISLANDS",
+      subtitle: "// intentando entender Astro",
+    }}
+    metadata={{ readingTime: "5 min de lectura" }}
+  />
+</section>
