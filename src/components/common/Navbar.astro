@@ -17,28 +17,36 @@ import NavLink from "./NavLink.astro";
       <NavLink
         href="/"
         isExternal={false}
-        className="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:text-primary duration-200"
+        className="text-on-surface-variant transition-colors font-label-md text-label-md hover:text-primary duration-200"
         >Inicio</NavLink
       >
       <NavLink
         href="/Articulos"
         isExternal={false}
-        className="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:text-primary duration-200"
+        className="text-on-surface-variant transition-colors font-label-md text-label-md hover:text-primary duration-200"
         >Articulos</NavLink
       >
       <NavLink
         href="/videos"
         isExternal={false}
-        className="text-on-surface-variant hover:text-on-surface transition-colors font-label-md text-label-md hover:text-primary duration-200"
+        className="text-on-surface-variant transition-colors font-label-md text-label-md hover:text-primary duration-200"
         >Videos</NavLink
       >
+      <NavLink
+        href="/aprende"
+        isExternal={false}
+        className="text-on-surface-variant transition-colors font-label-md text-label-md hover:text-primary duration-200"
+        >Aprende</NavLink
+      >
     </div>
-    <NavLink
-      isExternal={true}
-      className="font-label-md text-label-md flex items-center gap-2 text-custom-text hover:text-primary transition-colors border border-custom-border px-4 py-2 rounded-lg hover:bg-custom-hover font-mono"
-      href="https://github.com/crixpsitos/Empezando-como-dev"
-    >
-      github ↗
-    </NavLink>
+    <div class="flex items-center gap-8">
+      <NavLink
+        isExternal={true}
+        className="font-label-md text-label-md flex items-center gap-2 text-custom-text hover:text-primary transition-colors border border-custom-border px-4 py-2 rounded-lg hover:bg-custom-hover"
+        href="https://github.com/crixpsitos/Empezando-como-dev"
+      >
+        github ↗
+      </NavLink>
+    </div>
   </div>
 </nav>

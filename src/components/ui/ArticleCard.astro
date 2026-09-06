@@ -1,0 +1,142 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import {
+  getPublishedDate,
+  getRelativeTime,
+  getStatusLabel,
+} from "../../lib/helpers/articleHelpers";
+
+interface Props {
+  title: string;
+  description: string;
+
+  format: "article" | "video" | "mixed";
+  status: "learning" | "guide" | "project";
+
+  tags: string[];
+
+  cover: {
+    image?: string | ImageMetadata;
+    title?: string;
+    subtitle?: string;
+  };
+
+  metadata?: {
+    readingTime?: string;
+    videoTime?: string;
+  };
+
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const {
+  title,
+  description,
+  cover,
+  format,
+  status,
+  tags,
+  metadata,
+  createdAt,
+  updatedAt,
+} = Astro.props as Props;
+
+const formatLabels = {
+  article: "Articulo",
+  video: "Video",
+  mixed: "Articulo + video",
+};
+
+const hasBeenUpdated = updatedAt.getTime() !== createdAt.getTime();
+const relativeUpdatedDate = getRelativeTime(updatedAt);
+const publishedDate = getPublishedDate(createdAt);
+---
+
+<article
+  class="group flex flex-col overflow-hidden rounded-xl border border-custom-border bg-custom-card shadow-[0_18px_50px_rgba(0,0,0,0.14)] transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-[0_22px_60px_rgba(74,222,128,0.08)] lg:flex-row"
+>
+  <div
+    class="relative min-h-72 w-full overflow-hidden border-b border-custom-border bg-custom-tech-bg/35 p-7 lg:min-h-80 lg:w-[43%] lg:border-b-0 lg:border-r"
+  >
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(74,222,128,0.18),transparent_58%)]"
+    >
+    </div>
+    <div class="absolute right-6 top-6 z-10 rounded-full border border-primary/25 bg-custom-bg/70 px-3 py-1 font-label-sm text-label-sm uppercase text-primary">
+      {formatLabels[format]}
+    </div>
+    {typeof cover?.image === "string" ? (
+      <img
+        class="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
+        src={cover.image}
+        alt={cover.title || title}
+        loading="lazy"
+      />
+    ) : cover?.image ? (
+      <Image
+        class="absolute inset-0 h-full w-full object-cover opacity-80 transition-transform duration-500 group-hover:scale-105"
+        src={cover.image}
+        alt={cover.title || title}
+        widths={[480, 720]}
+        sizes="(min-width: 1024px) 43vw, 100vw"
+      />
+    ) : (
+      <div class="relative z-10 flex h-full flex-col justify-between">
+        <div class="space-y-4">
+          {cover?.title && (
+            <h3 class="max-w-sm whitespace-pre-line font-display-lg text-4xl leading-[0.92] tracking-[-0.04em] text-custom-tech-text sm:text-5xl">
+              {cover.title}
+            </h3>
+          )}
+          {cover?.subtitle && (
+            <p class="font-label-md text-label-md text-primary/70">
+              {cover.subtitle}
+            </p>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+  <div class="flex flex-1 flex-col justify-between gap-8 p-7 sm:p-9">
+    <div class="space-y-5">
+      <div class="flex flex-wrap items-center gap-3 font-label-sm text-label-sm uppercase text-on-surface-variant">
+        <span class="text-secondary">{getStatusLabel(status)}</span>
+        <span aria-hidden="true" class="text-custom-border">/</span>
+        <time datetime={createdAt.toISOString()}>{publishedDate}</time>
+        {hasBeenUpdated && (
+          <>
+            <span aria-hidden="true" class="text-custom-border">/</span>
+            <span>Actualizado <time datetime={updatedAt.toISOString()}>{relativeUpdatedDate}</time></span>
+          </>
+        )}
+      </div>
+      <div class="space-y-3">
+        <h2 class="max-w-2xl font-headline-lg text-headline-lg text-on-surface transition-colors group-hover:text-primary">
+          {title}
+        </h2>
+        <p class="max-w-2xl font-body-md text-body-md text-on-surface-variant">
+          {description}
+        </p>
+      </div>
+      {tags.length > 0 && (
+        <ul class="flex flex-wrap gap-2" aria-label="Tecnologias">
+          {tags.map((tag) => (
+            <li class="rounded-md border border-custom-border bg-custom-input px-2.5 py-1 font-label-sm text-label-sm text-on-surface-variant">
+              #{tag}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-custom-border pt-5">
+      <div class="font-label-sm text-label-sm text-on-surface-variant">
+        {metadata?.readingTime || metadata?.videoTime || "Lectura recomendada"}
+      </div>
+      <span class="inline-flex items-center gap-2 font-label-md text-label-md text-primary transition-[gap] group-hover:gap-3">
+        Leer articulo <span aria-hidden="true">-&gt;</span>
+      </span>
+    </div>
+  </div>
+</article>
